@@ -1,0 +1,147 @@
+@model IEnumerable<NivelAccesDate_CodeFirst.Models.Plan>
+@{
+    ViewData["Title"] = "Admin Dashboard - Manage Plans";
+}
+
+<div class="container mt-4">
+    <div class="row mb-4">
+        <div class="col-md-8">
+            <h2>Plan Management Dashboard</h2>
+        </div>
+        <div class="col-md-4 text-end">
+            <a asp-controller="Admin" asp-action="CreatePlan" class="btn btn-success">
+                <i class="bi bi-plus-circle"></i> Create New Plan
+            </a>
+        </div>
+    </div>
+
+    @if (TempData["SuccessMessage"] != null)
+    {
+        <div class="alert alert-success alert-dismissible fade show" role="alert">
+            @TempData["SuccessMessage"]
+            <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+        </div>
+    }
+
+    @if (TempData["ErrorMessage"] != null)
+    {
+        <div class="alert alert-danger alert-dismissible fade show" role="alert">
+            @TempData["ErrorMessage"]
+            <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+        </div>
+    }
+
+    <div class="card">
+        <div class="card-body">
+            <div class="table-responsive">
+                <table class="table table-hover">
+                    <thead class="table-light">
+                        <tr>
+                            <th>ID</th>
+                            <th>Name</th>
+                            <th>Limit</th>
+                            <th>Price ($)</th>
+                            <th>Active Users</th>
+                            <th>Actions</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @if (Model != null && Model.Any())
+                        {
+                            @foreach (var plan in Model)
+                            {
+                                <tr>
+                                    <td>@plan.Id</td>
+                                    <td><strong>@plan.Name</strong></td>
+                                    <td>@plan.Limit conversions</td>
+                                    <td>$@plan.Price</td>
+                                    <td>
+                                        <span class="badge bg-info">@plan.Users.Count users</span>
+                                    </td>
+                                    <td>
+                                        <div class="btn-group" role="group">
+                                            <a asp-controller="Admin" asp-action="EditPlan" asp-route-id="@plan.Id" 
+                                               class="btn btn-sm btn-primary">
+                                                Edit
+                                            </a>
+                                            <button type="button" class="btn btn-sm btn-danger" 
+                                                    data-bs-toggle="modal" 
+                                                    data-bs-target="#deleteModal@(plan.Id)">
+                                                Delete
+                                            </button>
+                                        </div>
+                                    </td>
+                                </tr>
+
+                                <!-- Delete Confirmation Modal -->
+                                <div class="modal fade" id="deleteModal@(plan.Id)" tabindex="-1">
+                                    <div class="modal-dialog">
+                                        <div class="modal-content">
+                                            <div class="modal-header">
+                                                <h5 class="modal-title">Confirm Delete</h5>
+                                                <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+                                            </div>
+                                            <div class="modal-body">
+                                                Are you sure you want to delete the <strong>@plan.Name</strong> plan?
+                                                @if (plan.Users.Count > 0)
+                                                {
+                                                    <div class="alert alert-warning mt-2">
+                                                        <strong>Warning:</strong> This plan has @plan.Users.Count active user(s). 
+                                                        You cannot delete it until all users are moved to another plan.
+                                                    </div>
+                                                }
+                                            </div>
+                                            <div class="modal-footer">
+                                                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
+                                                <form asp-controller="Admin" asp-action="DeletePlan" asp-route-id="@plan.Id" method="post" style="display:inline;">
+                                                    <button type="submit" class="btn btn-danger" @(plan.Users.Count > 0 ? "disabled" : "")>
+                                                        Delete
+                                                    </button>
+                                                </form>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            }
+                        }
+                        else
+                        {
+                            <tr>
+                                <td colspan="6" class="text-center">No plans found. Create your first plan!</td>
+                            </tr>
+                        }
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+
+    <div class="mt-4">
+        <div class="row">
+            <div class="col-md-12">
+                <div class="card">
+                    <div class="card-header bg-info text-white">
+                        <h5>Statistics</h5>
+                    </div>
+                    <div class="card-body">
+                        <div class="row text-center">
+                            <div class="col-md-4">
+                                <h3>@(Model?.Count() ?? 0)</h3>
+                                <p>Total Plans</p>
+                            </div>
+                            <div class="col-md-4">
+                                <h3>@(Model?.Sum(p => p.Users.Count) ?? 0)</h3>
+                                <p>Total Users</p>
+                            </div>
+                            <div class="col-md-4">
+                                <h3>$@(Model?.Sum(p => p.Price * p.Users.Count) ?? 0)</h3>
+                                <p>Monthly Revenue</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+

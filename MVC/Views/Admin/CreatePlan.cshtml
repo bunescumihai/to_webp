@@ -1,0 +1,54 @@
+@{
+    ViewData["Title"] = "Create New Plan";
+}
+
+<div class="container mt-4">
+    <div class="row justify-content-center">
+        <div class="col-md-8">
+            <div class="card">
+                <div class="card-header">
+                    <h3>Create New Plan</h3>
+                </div>
+                <div class="card-body">
+                    @if (ViewBag.ErrorMessage != null)
+                    {
+                        <div class="alert alert-danger">@ViewBag.ErrorMessage</div>
+                    }
+
+                    <form method="post" asp-controller="Admin" asp-action="CreatePlan">
+                        <div class="mb-3">
+                            <label for="name" class="form-label">Plan Name <span class="text-danger">*</span></label>
+                            <input type="text" class="form-control" id="name" name="name" required 
+                                   placeholder="e.g., Basic, Premium, Enterprise" />
+                            <div class="form-text">Choose a descriptive name for the plan</div>
+                        </div>
+
+                        <div class="mb-3">
+                            <label for="limit" class="form-label">Conversion Limit <span class="text-danger">*</span></label>
+                            <input type="number" class="form-control" id="limit" name="limit" required 
+                                   min="0" value="100" />
+                            <div class="form-text">Maximum number of conversions allowed per month</div>
+                        </div>
+
+                        <div class="mb-3">
+                            <label for="price" class="form-label">Price ($) <span class="text-danger">*</span></label>
+                            <input type="number" class="form-control" id="price" name="price" required 
+                                   min="0" step="0.01" value="0" />
+                            <div class="form-text">Monthly subscription price in dollars</div>
+                        </div>
+
+                        <div class="d-flex justify-content-between">
+                            <a asp-controller="Admin" asp-action="Dashboard" class="btn btn-secondary">
+                                <i class="bi bi-arrow-left"></i> Back to Dashboard
+                            </a>
+                            <button type="submit" class="btn btn-success">
+                                <i class="bi bi-check-circle"></i> Create Plan
+                            </button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
