@@ -13,6 +13,32 @@
 
     <ItemGroup>
         <PackageReference Include="Microsoft.AspNetCore.Components.Web" Version="8.0.7"/>
+        <PackageReference Include="Microsoft.AspNetCore.Mvc" Version="2.2.0"/>
+        <FrameworkReference Include="Microsoft.AspNetCore.App" />
+    </ItemGroup>
+
+    <ItemGroup>
+      <ProjectReference Include="..\CodeFirst\CodeFirst.csproj" />
+      <ProjectReference Include="..\DAL\DAL.csproj" />
+      <ProjectReference Include="..\SL\SL.csproj" />
+    </ItemGroup>
+
+    <ItemGroup>
+      <None Update="Project\wwwroot\background.png">
+        <Link>RazorClassLibrary1\wwwroot\background.png</Link>
+      </None>
+      <None Update="Project\wwwroot\exampleJsInterop.js">
+        <Link>RazorClassLibrary1\wwwroot\exampleJsInterop.js</Link>
+      </None>
+      <None Update="Project\Component1.razor.css">
+        <Link>RazorClassLibrary1\Component1.razor.css</Link>
+      </None>
+    </ItemGroup>
+
+    <ItemGroup>
+      <Compile Update="Project\ExampleJsInterop.cs">
+        <Link>RazorClassLibrary1\ExampleJsInterop.cs</Link>
+      </Compile>
     </ItemGroup>
 
 </Project>

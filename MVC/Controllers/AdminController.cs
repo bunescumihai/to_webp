@@ -1,7 +1,5 @@
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.AspNetCore.Http;
-using ServiceLayer.Services;
-using NivelAccesDate_CodeFirst.Models;
+using SL.Services;
 
 namespace MVC.Controllers;
 

@@ -15,10 +15,11 @@
     </ItemGroup>
 
     <ItemGroup>
-      <ProjectReference Include="..\NivelAccesDate_DbFirst\NivelAccesDate_DbFirst.csproj" />
-      <ProjectReference Include="..\NivelAccesDate_CodeFirst\NivelAccesDate_CodeFirst.csproj" />
-      <ProjectReference Include="..\ServiceLayer\ServiceLayer.csproj" />
+      <ProjectReference Include="..\CodeFirst\CodeFirst.csproj" />
+      <ProjectReference Include="..\DAL\DAL.csproj" />
+      <ProjectReference Include="..\SL\SL.csproj" />
       <ProjectReference Include="..\MVC\MVC.csproj" />
+      <ProjectReference Include="..\API\API.csproj" />
     </ItemGroup>
 
 </Project>

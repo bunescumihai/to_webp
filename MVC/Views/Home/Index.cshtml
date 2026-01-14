@@ -1,0 +1,80 @@
+@{
+    ViewData["Title"] = "Home";
+}
+
+<div class="text-center">
+    <h1 class="display-4">Welcome to WebP Converter</h1>
+    <p class="lead">Convert your images to WebP format</p>
+</div>
+
+<div class="row mt-5">
+    <div class="col-md-12">
+        <div class="card-deck d-flex justify-content-center gap-4">
+            @if (ViewBag.IsLoggedIn)
+            {
+                <div class="card text-center shadow" style="max-width: 18rem;">
+                    <div class="card-body">
+                        <i class="bi bi-images" style="font-size: 3rem; color: #0d6efd;"></i>
+                        <h5 class="card-title mt-3">Convert Images</h5>
+                        <p class="card-text">Upload and convert your images to WebP format</p>
+                        <a href="http://localhost:4200/upload" class="btn btn-primary">Start Converting</a>
+                    </div>
+                </div>
+                
+                <div class="card text-center shadow" style="max-width: 18rem;">
+                    <div class="card-body">
+                        <i class="bi bi-clock-history" style="font-size: 3rem; color: #198754;"></i>
+                        <h5 class="card-title mt-3">My Conversions</h5>
+                        <p class="card-text">View your conversion history and download files</p>
+                        <a href="http://localhost:4200/conversions" class="btn btn-success">View History</a>
+                    </div>
+                </div>
+            }
+            else
+            {
+                <div class="card text-center shadow" style="max-width: 18rem;">
+                    <div class="card-body">
+                        <i class="bi bi-box-arrow-in-right" style="font-size: 3rem; color: #0d6efd;"></i>
+                        <h5 class="card-title mt-3">Login</h5>
+                        <p class="card-text">Sign in to your account to start converting images</p>
+                        <a href="/Auth/Login" class="btn btn-primary">Login</a>
+                    </div>
+                </div>
+                
+                <div class="card text-center shadow" style="max-width: 18rem;">
+                    <div class="card-body">
+                        <i class="bi bi-person-plus" style="font-size: 3rem; color: #198754;"></i>
+                        <h5 class="card-title mt-3">Register</h5>
+                        <p class="card-text">Create a new account and start using our service</p>
+                        <a href="/Auth/Register" class="btn btn-success">Register</a>
+                    </div>
+                </div>
+                
+                <div class="card text-center shadow" style="max-width: 18rem;">
+                    <div class="card-body">
+                        <i class="bi bi-info-circle" style="font-size: 3rem; color: #0dcaf0;"></i>
+                        <h5 class="card-title mt-3">About</h5>
+                        <p class="card-text">Learn more about WebP and our conversion service</p>
+                        <a href="/Home/About" class="btn btn-info">Learn More</a>
+                    </div>
+                </div>
+            }
+        </div>
+    </div>
+</div>
+
+<div class="row mt-5">
+    <div class="col-md-12">
+        <div class="alert alert-info" role="alert">
+            <h4 class="alert-heading">Why WebP?</h4>
+            <p>WebP is a modern image format that provides superior lossless and lossy compression for images on the web. Using WebP, webmasters and web developers can create smaller, richer images that make the web faster.</p>
+            <hr>
+            <p class="mb-0">WebP images are 25-35% smaller than comparable JPEG images at equivalent quality.</p>
+        </div>
+    </div>
+</div>
+
+@section Scripts {
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.0/font/bootstrap-icons.css">
+}
+

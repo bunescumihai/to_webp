@@ -16,8 +16,4 @@
         <PackageReference Include="Microsoft.EntityFrameworkCore" Version="8.0.7"/>
     </ItemGroup>
 
-    <ItemGroup>
-      <ProjectReference Include="..\NivelAccesDate_CodeFirst\NivelAccesDate_CodeFirst.csproj" />
-    </ItemGroup>
-
 </Project>

@@ -20,29 +20,26 @@
             <div class="navbar-collapse collapse d-sm-inline-flex justify-content-between">
                 <ul class="navbar-nav flex-grow-1">
                     <li class="nav-item">
-                        <a class="nav-link text-dark" href="/">Home</a>
-                    </li>
-                    <li class="nav-item">
-                        <a class="nav-link text-dark" href="/Privacy">Privacy</a>
+                        <a class="nav-link text-dark" asp-controller="Home" asp-action="Index">Home</a>
                     </li>
                 </ul>
                 <ul class="navbar-nav">
                     @if (Context.Request.Cookies.ContainsKey("user_id"))
                     {
                         <li class="nav-item">
-                            <a class="nav-link text-dark" href="/Admin/Dashboard">Admin Dashboard</a>
+                            <a class="nav-link text-dark" asp-controller="Admin" asp-action="Dashboard">Admin</a>
                         </li>
                         <li class="nav-item">
-                            <a class="nav-link text-dark" href="/Auth/Logout">Logout</a>
+                            <a class="nav-link text-dark" asp-controller="Auth" asp-action="Logout">Logout</a>
                         </li>
                     }
                     else
                     {
                         <li class="nav-item">
-                            <a class="nav-link text-dark" href="/Auth/Login">Login</a>
+                            <a class="nav-link text-dark" asp-controller="Auth" asp-action="Login">Login</a>
                         </li>
                         <li class="nav-item">
-                            <a class="nav-link text-dark" href="/Auth/Register">Register</a>
+                            <a class="nav-link text-dark" asp-controller="Auth" asp-action="Register">Register</a>
                         </li>
                     }
                 </ul>
