@@ -6,6 +6,9 @@ public class Plan
 
     public string Name { get; set; } = null!;
 
+    /// <summary>
+    /// Maximum number of conversions allowed per day
+    /// </summary>
     public int Limit { get; set; } 
 
     public int Price { get; set; }

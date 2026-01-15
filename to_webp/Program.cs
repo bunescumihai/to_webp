@@ -20,6 +20,9 @@ builder.Services.AddCors(options =>
 // Add services to the container.
 builder.Services.AddControllersWithViews();
 
+// Add Memory Cache
+builder.Services.AddMemoryCache();
+
 // Add database context from CodeFirst package
 builder.Services.AddDbContext<ConversionsDbContext>(options =>
     options.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnection")));
@@ -31,6 +34,7 @@ builder.Services.AddScoped<IConversionRepository, ConversionRepository>();
 builder.Services.AddScoped<IImageRepository, ImageRepository>();
 
 // Register services
+builder.Services.AddSingleton<ConversionLogger>();
 builder.Services.AddScoped<AuthService>();
 builder.Services.AddScoped<PlanService>();
 builder.Services.AddScoped<ImageConversionService>();

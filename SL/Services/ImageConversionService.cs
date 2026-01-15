@@ -8,15 +8,18 @@ public class ImageConversionService
     private readonly IImageRepository _imageRepository;
     private readonly IConversionRepository _conversionRepository;
     private readonly IUserRepository _userRepository;
+    private readonly ConversionLogger _logger;
 
     public ImageConversionService(
         IImageRepository imageRepository,
         IConversionRepository conversionRepository,
-        IUserRepository userRepository)
+        IUserRepository userRepository,
+        ConversionLogger logger)
     {
         _imageRepository = imageRepository;
         _conversionRepository = conversionRepository;
         _userRepository = userRepository;
+        _logger = logger;
     }
 
     public async Task<ConversionResult> ConvertToWebPAsync(
@@ -39,13 +42,15 @@ public class ImageConversionService
             throw new InvalidOperationException("Invalid user");
         }
 
-        // Check conversion limit
+        // Check conversion limit (per day)
         var allConversions = await _conversionRepository.GetAllAsync();
-        var userConversionCount = allConversions.Count(c => c.UserId == userId.Value);
+        var today = DateTime.UtcNow.Date;
+        var todayConversionCount = allConversions.Count(c => c.UserId == userId.Value && c.Datetime.Date == today);
 
-        if (userConversionCount >= user.Plan.Limit)
+        if (todayConversionCount >= user.Plan.Limit)
         {
-            throw new InvalidOperationException("Conversion limit reached. Please upgrade your plan.");
+            _logger.LogLimitReached(userId.Value, todayConversionCount, user.Plan.Limit);
+            throw new InvalidOperationException("Daily conversion limit reached. Please upgrade your plan or try again tomorrow.");
         }
 
         // Calculate MD5 hash
@@ -95,6 +100,15 @@ public class ImageConversionService
             };
             conversion = await _conversionRepository.InsertAsync(conversion);
 
+            // Log successful conversion
+            _logger.LogConversion(
+                conversion.Id,
+                userId.Value,
+                originalFileName,
+                originalFileSize,
+                originalFormat
+            );
+
             return new ConversionResult
             {
                 ConversionId = conversion.Id,
@@ -106,6 +120,7 @@ public class ImageConversionService
         }
         catch (Exception ex)
         {
+            _logger.LogError(userId.Value, originalFileName, ex.Message);
             throw new InvalidOperationException($"Error saving conversion: {ex.Message}", ex);
         }
     }
@@ -131,6 +146,12 @@ public class ImageConversionService
         var conversion = await _conversionRepository.GetByIdAsync(conversionId);
         if (conversion == null)
             return false;
+
+        // Log deletion
+        var fileName = conversion.ImageFrom != null 
+            ? Path.GetFileName(conversion.ImageFrom.Path) 
+            : "Unknown";
+        _logger.LogDeletion(conversionId, conversion.UserId, fileName);
 
         // Delete physical file (only if it exists)
         if (conversion.ImageFrom != null && File.Exists(conversion.ImageFrom.Path))
@@ -163,7 +184,7 @@ public class ImageConversionService
             .OrderByDescending(c => c.Datetime)
             .ToList();
 
-        // Get total conversions count for limit check
+        // Get total conversions count for historical tracking
         var totalConversions = allConversions.Count(c => c.UserId == userId);
 
         return new TodayConversionsResult
@@ -172,7 +193,7 @@ public class ImageConversionService
             TodayCount = todayConversions.Count,
             TotalCount = totalConversions,
             Limit = user.Plan.Limit,
-            RemainingConversions = user.Plan.Limit - totalConversions
+            RemainingConversions = user.Plan.Limit - todayConversions.Count
         };
     }
 }

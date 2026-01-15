@@ -41,7 +41,7 @@ public class AuthController : Controller
         // Set user_id cookie
         Response.Cookies.Append("user_id", user.Id.ToString(), new CookieOptions
         {
-            HttpOnly = true,
+            HttpOnly = false, // Allow JavaScript access
             Secure = true,
             SameSite = SameSiteMode.Strict,
             Expires = DateTimeOffset.UtcNow.AddDays(30)
@@ -84,7 +84,7 @@ public class AuthController : Controller
         // Set user_id cookie
         Response.Cookies.Append("user_id", user.Id.ToString(), new CookieOptions
         {
-            HttpOnly = true,
+            HttpOnly = false, // Allow JavaScript access
             Secure = true,
             SameSite = SameSiteMode.Strict,
             Expires = DateTimeOffset.UtcNow.AddDays(30)
